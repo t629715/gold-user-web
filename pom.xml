@@ -41,6 +41,11 @@
 			<artifactId>goldeasy-user-interface</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
+		<dependency>
+			<groupId>com.goldeasy.user</groupId>
+			<artifactId>goldeasy-user-entity</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
 
 	</dependencies>
 
