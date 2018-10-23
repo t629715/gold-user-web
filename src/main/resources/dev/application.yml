@@ -1,0 +1,22 @@
+server:
+  port: 18081
+
+
+
+
+dubbo:
+  service: version:1.0.0 #定义项目版本
+  scan:
+    basePackages: com.goldeasy.user.web.controller #调用dubbo组建扫描的项目路径
+  application:
+    id: easygold-user-web #注册在注册中心的名称，唯一标识，请勿重复
+    name: easygold-user-web #注册在注册中心的名称，唯一标识，请勿重复
+    qos-enable: false
+  protocol:
+    port: 30002 #暴露服务端口 （默认是20880，修改端口，不同的服务提供者端口不能重复）
+    retries: 1 #远程服务调用重试次数，不包括第一次调用，不需要重试请设为0，默认2
+    timeout: 120000
+    name: dubbo #默认名称，勿修改
+  registry:
+    id: zookeeper-registry
+    address: zookeeper://192.168.10.11:2181?backup=192.168.10.12:2181,192.168.10.13:2181

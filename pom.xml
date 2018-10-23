@@ -29,6 +29,26 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>com.alibaba.boot</groupId>
+			<artifactId>dubbo-spring-boot-starter</artifactId>
+			<version>0.2.0</version>
+			<!--去除内置springboot-->
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-starter</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-starter-tomcat</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-undertow</artifactId>
+		</dependency>
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -46,16 +66,87 @@
 			<artifactId>goldeasy-user-entity</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
+		<!--引用公共包 排除不需要jar包-->
+		<dependency>
+			<groupId>com.goldeasy.common</groupId>
+			<artifactId>goldeasy-common</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-starter</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>tk.mybatis</groupId>
+					<artifactId>mapper-spring-boot-starter</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.github.pagehelper</groupId>
+					<artifactId>pagehelper</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
 
 	</dependencies>
-
+	<profiles>
+		<profile>
+			<!-- 本地开发环境 -->
+			<id>dev</id>
+			<properties>
+				<profiles.active>dev</profiles.active>
+			</properties>
+			<!-- <activation> <activeByDefault>true</activeByDefault> </activation> -->
+		</profile>
+		<profile>
+			<!-- 生产环境 -->
+			<id>pro</id>
+			<properties>
+				<profiles.active>pro</profiles.active>
+			</properties>
+		</profile>
+		<profile>
+			<!-- 准生产环境 -->
+			<id>nearpro</id>
+			<properties>
+				<profiles.active>nearpro</profiles.active>
+			</properties>
+		</profile>
+		<profile>
+			<!-- 测试 -->
+			<id>test</id>
+			<properties>
+				<profiles.active>test</profiles.active>
+			</properties>
+		</profile>
+	</profiles>
 	<build>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+
 		</plugins>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<!-- 资源根目录排除各环境的配置，防止在生成目录中多余其它目录 -->
+				<excludes>
+					<exclude>pro/*</exclude>
+					<exclude>dev/*</exclude>
+					<exclude>nearpro/*</exclude>
+					<exclude>test/*</exclude>
+				</excludes>
+			</resource>
+			<resource>
+				<directory>src/main/resources/${profiles.active}</directory>
+				<!-- 部署到正式环境之后打开,自己机子上开发测试请屏蔽-->
+				<!--<excludes>
+                <exclude>**/*.yml</exclude>
+                </excludes>-->
+			</resource>
+		</resources>
+
 	</build>
 
 
