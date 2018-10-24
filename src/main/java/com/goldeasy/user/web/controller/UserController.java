@@ -4,6 +4,7 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import com.goldeasy.common.response.CommonResponse;
 import com.goldeasy.user.service.UserService;
 import com.goldeasy.user.vo.UserInfoVO;
+import com.goldeasy.user.vo.UserPersonalVO;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -78,5 +79,22 @@ public class UserController {
             throw e;
         }
         return CommonResponse.fail("查询失败");
+    }
+
+    /**
+     * fetch 获取个人信息
+     * @author: tianliya
+     * @time: 2018/10/23
+     * @param userId
+     * @return
+     */
+    @GetMapping("/getPersonalInfo")
+    public CommonResponse getPersonalInfo( Long userId){
+        try{
+            UserPersonalVO userPersonalVO = this.userService.getUserHeadImage( 8L);
+            return CommonResponse.success("查询成功",userPersonalVO);
+        }catch (Exception e){
+           return CommonResponse.error("系统异常");
+        }
     }
 }
