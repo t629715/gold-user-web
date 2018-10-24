@@ -5,7 +5,8 @@ server:
 
 
 dubbo:
-  service: version:1.0.0 #定义项目版本
+  service:
+    version: 1.0.0 #定义项目版本
   scan:
     basePackages: com.goldeasy.user.web.controller #调用dubbo组建扫描的项目路径
   application:

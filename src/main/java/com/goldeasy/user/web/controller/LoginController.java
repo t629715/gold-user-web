@@ -7,7 +7,6 @@ import com.goldeasy.user.dto.UserRegisterDTO;
 import com.goldeasy.user.service.UserService;
 import com.goldeasy.user.web.util.HttpUtil;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -46,7 +45,7 @@ public class LoginController {
      */
     private final String LOGIN_DATA = "data";
 
-    @Reference(timeout = 2000,version = "1.0.0", loadbalance = "random")
+    @Reference(timeout = 2000,version = "${dubbo.service.version}", loadbalance = "random")
     private UserService userService;
 
     /**
