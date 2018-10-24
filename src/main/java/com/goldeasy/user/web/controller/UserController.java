@@ -4,6 +4,7 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import com.goldeasy.common.response.CommonResponse;
 import com.goldeasy.user.service.UserService;
 import com.goldeasy.user.vo.UserInfoVO;
+import com.goldeasy.user.vo.UserNickNameVO;
 import com.goldeasy.user.vo.UserPersonalVO;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -71,7 +72,7 @@ public class UserController {
     @GetMapping("/getUserInfo")
     public CommonResponse getUserInfo( Long userId){
         try{
-            UserInfoVO userInfoVO = this.userService.getUserInfoById( 8L);
+            UserInfoVO userInfoVO = this.userService.getUserInfoById( userId);
             if (userInfoVO != null){
                 return CommonResponse.success("查询成功",userInfoVO);
             }
@@ -91,10 +92,49 @@ public class UserController {
     @GetMapping("/getPersonalInfo")
     public CommonResponse getPersonalInfo( Long userId){
         try{
-            UserPersonalVO userPersonalVO = this.userService.getUserHeadImage( 8L);
+            UserPersonalVO userPersonalVO = this.userService.getUserHeadImage( userId);
             return CommonResponse.success("查询成功",userPersonalVO);
         }catch (Exception e){
            return CommonResponse.error("系统异常");
+        }
+    }
+
+
+    /**
+     * fetch 获取用户昵称
+     * @author: tianliya
+     * @time: 2018/10/23
+     * @param userId
+     * @return
+     */
+    @GetMapping("/getUserNickName")
+    public CommonResponse getUserNickName( Long userId){
+        try{
+            UserNickNameVO userNickNameVO = this.userService.getUserNickName( userId);
+            return CommonResponse.success("查询成功",userNickNameVO);
+        }catch (Exception e){
+            return CommonResponse.error("系统异常");
+        }
+    }
+
+    /**
+     * fetch 修改用户昵称
+     * @author: tianliya
+     * @time: 2018/10/23
+     * @param userId
+     * @return
+     */
+    @GetMapping("/modifyUserNickName")
+    public CommonResponse modifyUserNickName( Long userId, String userNickName){
+        try{
+            boolean flag = this.userService.updateUserNickName( userId, userNickName);
+            if (flag){
+                return CommonResponse.success("操作成功");
+            }else {
+                return CommonResponse.success("操作失败");
+            }
+        }catch (Exception e){
+            return CommonResponse.error("系统异常");
         }
     }
 }
