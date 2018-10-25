@@ -51,17 +51,24 @@ public class HttpUtil {
             // Safari/530
             "Nokia",
 
-            "SAMSUNG",// 三星手机
+            "SAMSUNG",
+            // 三星手机
             // SAMSUNG-GT-B7722/1.0+SHP/VPP/R5+Dolfin/1.5+Nextreaming+SMM-MMS/1.2.0+profile/MIDP-2.1+configuration/CLDC-1.1
-            "MIDP-2",// j2me2.0，Mozilla/5.0 (SymbianOS/9.3; U; Series60/3.2
+            "MIDP-2",
+            // j2me2.0，Mozilla/5.0 (SymbianOS/9.3; U; Series60/3.2
             // NokiaE75-1 /110.48.125 Profile/MIDP-2.1
             // Configuration/CLDC-1.1 ) AppleWebKit/413 (KHTML like
             // Gecko) Safari/413
-            "CLDC1.1",// M600/MIDP2.0/CLDC1.1/Screen-240X320
-            "SymbianOS",// 塞班系统的，
-            "MAUI",// MTK山寨机默认ua
-            "UNTRUSTED/1.0",// 疑似山寨机的ua，基本可以确定还是手机
-            "Windows CE",// Windows CE，Mozilla/4.0 (compatible; MSIE 6.0;
+            "CLDC1.1",
+            // M600/MIDP2.0/CLDC1.1/Screen-240X320
+            "SymbianOS",
+            // 塞班系统的，
+            "MAUI",
+            // MTK山寨机默认ua
+            "UNTRUSTED/1.0",
+            // 疑似山寨机的ua，基本可以确定还是手机
+            "Windows CE",
+            // Windows CE，Mozilla/4.0 (compatible; MSIE 6.0;
             // Windows CE; IEMobile 7.11)
             "iPhone",
             // iPhone是否也转wap？不管它，先区分出来再说。Mozilla/5.0 (iPhone; U; CPU
