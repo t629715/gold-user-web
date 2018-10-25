@@ -3,12 +3,15 @@ package com.goldeasy.user.web.controller;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.goldeasy.common.response.CommonResponse;
 import com.goldeasy.user.service.UserService;
+import com.goldeasy.user.vo.SysBankVO;
 import com.goldeasy.user.vo.UserInfoVO;
 import com.goldeasy.user.vo.UserNickNameVO;
 import com.goldeasy.user.vo.UserPersonalVO;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * @author: tianliya
@@ -131,6 +134,22 @@ public class UserController {
             }else {
                 return CommonResponse.success("操作失败");
             }
+        }catch (Exception e){
+            return CommonResponse.error("系统异常");
+        }
+    }
+
+    /**
+     * fetch 获取开户行列表
+     * @author: tianliya
+     * @time: 2018/10/23
+     * @return
+     */
+    @GetMapping("/getBankList")
+    public CommonResponse getBankList(){
+        try{
+            List<SysBankVO> sysBankVOList = this.userService.listSysBank();
+            return CommonResponse.success("查询成功",sysBankVOList);
         }catch (Exception e){
             return CommonResponse.error("系统异常");
         }
