@@ -3,6 +3,7 @@ package com.goldeasy.user.web.controller;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.goldeasy.common.response.CommonResponse;
 import com.goldeasy.user.dto.UserBankCardDTO;
+import com.goldeasy.user.dto.UserRealNameDTO;
 import com.goldeasy.user.entity.UserAlipay;
 import com.goldeasy.user.service.UserAlipayService;
 import com.goldeasy.user.service.UserBankCardService;
@@ -139,10 +140,32 @@ public class UserController {
      * @author: tianliya
      * @time: 2018/10/23
      */
-    @GetMapping("/modifyUserNickName")
+    @PostMapping("/modifyUserNickName")
     public CommonResponse modifyUserNickName(Long userId, String userNickName) {
         try {
             boolean flag = this.userService.updateUserNickName(userId, userNickName);
+            if (flag) {
+                return CommonResponse.success("操作成功");
+            } else {
+                return CommonResponse.success("操作失败");
+            }
+        } catch (Exception e) {
+            return CommonResponse.error("系统异常");
+        }
+    }
+
+    /**
+     * fetch 修改用头像
+     *
+     * @param userId
+     * @return
+     * @author: tianliya
+     * @time: 2018/10/23
+     */
+    @GetMapping("/modifyUserHeadImage")
+    public CommonResponse modifyUserHeadImage(Long userId, String userHeadImage) {
+        try {
+            boolean flag = this.userService.updateUserHeadImage(userId, userHeadImage);
             if (flag) {
                 return CommonResponse.success("操作成功");
             } else {
@@ -282,6 +305,46 @@ public class UserController {
     public CommonResponse modifyAliPay(UserAlipay userAlipay) {
         try {
             boolean flag = this.userAlipayService.modifyUserAlipay(userAlipay);
+            if (flag) {
+                return CommonResponse.success("操作成功");
+            } else {
+                return CommonResponse.fail("操作失败");
+            }
+        } catch (Exception e) {
+            return CommonResponse.error("系统异常");
+        }
+    }
+
+
+    /**
+     * fetch 用户实名认证信息
+     *
+     * @return
+     * @author: tianliya
+     * @time: 2018/10/23
+     */
+
+    @GetMapping("/realNameAuthInfo")
+    public CommonResponse realNameAuthInfo(Long userId) {
+        try {
+            UserRealNameAuthVO userRealNameAuthVO = this.userService.getUserRealNameInfo(userId);
+            return CommonResponse.success("操作成功", userRealNameAuthVO);
+        } catch (Exception e) {
+            return CommonResponse.error("系统异常");
+        }
+    }
+
+    /**
+     * fetch 用户实名认证申请
+     *
+     * @return
+     * @author: tianliya
+     * @time: 2018/10/23
+     */
+    @PostMapping("/realNameAuthApply")
+    public CommonResponse realNameAuthApply(UserRealNameDTO userRealNameDTO, Long userId) {
+        try {
+            boolean flag = this.userService.realNameAuth(userRealNameDTO, userId);
             if (flag) {
                 return CommonResponse.success("操作成功");
             } else {
