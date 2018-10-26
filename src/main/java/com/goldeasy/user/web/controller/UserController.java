@@ -3,6 +3,8 @@ package com.goldeasy.user.web.controller;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.goldeasy.common.response.CommonResponse;
 import com.goldeasy.user.dto.UserBankCardDTO;
+import com.goldeasy.user.entity.UserAlipay;
+import com.goldeasy.user.service.UserAlipayService;
 import com.goldeasy.user.service.UserBankCardService;
 import com.goldeasy.user.service.UserService;
 import com.goldeasy.user.vo.*;
@@ -21,46 +23,51 @@ import java.util.List;
 @RestController
 @RequestMapping("/user")
 public class UserController {
-    @Reference(timeout = 2000,version = "${dubbo.service.version}", loadbalance = "random")
+    @Reference(timeout = 2000, version = "${dubbo.service.version}", loadbalance = "random")
     private UserService userService;
-    @Reference(timeout = 2000,version = "${dubbo.service.version}", loadbalance = "random")
+    @Reference(timeout = 2000, version = "${dubbo.service.version}", loadbalance = "random")
     private UserBankCardService userBankCardService;
+
+    @Reference(timeout = 2000, version = "${dubbo.service.version}", loadbalance = "random")
+    private UserAlipayService userAlipayService;
 
 
     /**
      * fetch 修改密码功能校验旧密码
-     * @author: tianliya
-     * @time: 2018/10/23
+     *
      * @param oldPassword
      * @param userId
      * @return
+     * @author: tianliya
+     * @time: 2018/10/23
      */
     @GetMapping("/authOldPassword")
-    public CommonResponse authOldPassword(String oldPassword, Long userId){
+    public CommonResponse authOldPassword(String oldPassword, Long userId) {
         Boolean flag = this.userService.validatePassword(oldPassword, userId);
-        if (flag){
+        if (flag) {
             return CommonResponse.success("密码正确正确");
-        }else {
+        } else {
             return CommonResponse.fail("原密码错误");
         }
     }
 
     /**
      * fetch 修改密码功能设置新密码
-     * @author: tianliya
-     * @time: 2018/10/23
+     *
      * @param password
      * @param userId
      * @return
+     * @author: tianliya
+     * @time: 2018/10/23
      */
     @GetMapping("/setPassword")
-    public CommonResponse setPassword(String password, Long userId){
-        try{
+    public CommonResponse setPassword(String password, Long userId) {
+        try {
             Boolean flag = this.userService.modifyPassword(password, userId);
-            if (flag){
+            if (flag) {
                 return CommonResponse.success("修改成功");
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             throw e;
         }
         return CommonResponse.fail("修改失败");
@@ -68,19 +75,20 @@ public class UserController {
 
     /**
      * fetch 获取用户信息
-     * @author: tianliya
-     * @time: 2018/10/23
+     *
      * @param userId
      * @return
+     * @author: tianliya
+     * @time: 2018/10/23
      */
     @GetMapping("/getUserInfo")
-    public CommonResponse getUserInfo( Long userId){
-        try{
-            UserInfoVO userInfoVO = this.userService.getUserInfoById( userId);
-            if (userInfoVO != null){
-                return CommonResponse.success("查询成功",userInfoVO);
+    public CommonResponse getUserInfo(Long userId) {
+        try {
+            UserInfoVO userInfoVO = this.userService.getUserInfoById(userId);
+            if (userInfoVO != null) {
+                return CommonResponse.success("查询成功", userInfoVO);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             throw e;
         }
         return CommonResponse.fail("查询失败");
@@ -88,129 +96,200 @@ public class UserController {
 
     /**
      * fetch 获取个人信息
-     * @author: tianliya
-     * @time: 2018/10/23
+     *
      * @param userId
      * @return
+     * @author: tianliya
+     * @time: 2018/10/23
      */
     @GetMapping("/getPersonalInfo")
-    public CommonResponse getPersonalInfo( Long userId){
-        try{
-            UserPersonalVO userPersonalVO = this.userService.getUserHeadImage( userId);
-            return CommonResponse.success("查询成功",userPersonalVO);
-        }catch (Exception e){
-           return CommonResponse.error("系统异常");
+    public CommonResponse getPersonalInfo(Long userId) {
+        try {
+            UserPersonalVO userPersonalVO = this.userService.getUserHeadImage(userId);
+            return CommonResponse.success("查询成功", userPersonalVO);
+        } catch (Exception e) {
+            return CommonResponse.error("系统异常");
         }
     }
 
 
     /**
      * fetch 获取用户昵称
-     * @author: tianliya
-     * @time: 2018/10/23
+     *
      * @param userId
      * @return
+     * @author: tianliya
+     * @time: 2018/10/23
      */
     @GetMapping("/getUserNickName")
-    public CommonResponse getUserNickName( Long userId){
-        try{
-            UserNickNameVO userNickNameVO = this.userService.getUserNickName( userId);
-            return CommonResponse.success("查询成功",userNickNameVO);
-        }catch (Exception e){
+    public CommonResponse getUserNickName(Long userId) {
+        try {
+            UserNickNameVO userNickNameVO = this.userService.getUserNickName(userId);
+            return CommonResponse.success("查询成功", userNickNameVO);
+        } catch (Exception e) {
             return CommonResponse.error("系统异常");
         }
     }
 
     /**
      * fetch 修改用户昵称
-     * @author: tianliya
-     * @time: 2018/10/23
+     *
      * @param userId
      * @return
+     * @author: tianliya
+     * @time: 2018/10/23
      */
     @GetMapping("/modifyUserNickName")
-    public CommonResponse modifyUserNickName( Long userId, String userNickName){
-        try{
-            boolean flag = this.userService.updateUserNickName( userId, userNickName);
-            if (flag){
+    public CommonResponse modifyUserNickName(Long userId, String userNickName) {
+        try {
+            boolean flag = this.userService.updateUserNickName(userId, userNickName);
+            if (flag) {
                 return CommonResponse.success("操作成功");
-            }else {
+            } else {
                 return CommonResponse.success("操作失败");
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             return CommonResponse.error("系统异常");
         }
     }
 
     /**
      * fetch 获取开户行列表
+     *
+     * @return
      * @author: tianliya
      * @time: 2018/10/23
-     * @return
      */
     @GetMapping("/getBankList")
-    public CommonResponse getBankList(){
-        try{
+    public CommonResponse getBankList() {
+        try {
             List<SysBankVO> sysBankVOList = this.userBankCardService.listSysBank();
-            return CommonResponse.success("查询成功",sysBankVOList);
-        }catch (Exception e){
+            return CommonResponse.success("查询成功", sysBankVOList);
+        } catch (Exception e) {
             return CommonResponse.error("系统异常");
         }
     }
 
     /**
      * fetch 获取用户银行卡列表
+     *
+     * @return
      * @author: tianliya
      * @time: 2018/10/23
-     * @return
      */
     @GetMapping("/getUserBankList")
-    public CommonResponse getUserBankList(Long userId){
-        try{
+    public CommonResponse getUserBankList(Long userId) {
+        try {
             List<UserBankVO> userBankVOList = this.userBankCardService.listUserBank(userId);
-            return CommonResponse.success("查询成功",userBankVOList);
-        }catch (Exception e){
+            return CommonResponse.success("查询成功", userBankVOList);
+        } catch (Exception e) {
             return CommonResponse.error("系统异常");
         }
     }
 
     /**
      * fetch 绑定用户银行卡
+     *
+     * @return
      * @author: tianliya
      * @time: 2018/10/23
-     * @return
      */
     @PostMapping("/bindUserBank")
-    public CommonResponse bindUserBank(UserBankCardDTO userBankCardDTO, Long userId){
-        try{
-            boolean flag  = this.userBankCardService.addUserBankCard(userBankCardDTO,userId);
-            if (flag){
+    public CommonResponse bindUserBank(UserBankCardDTO userBankCardDTO, Long userId) {
+        try {
+            boolean flag = this.userBankCardService.addUserBankCard(userBankCardDTO, userId);
+            if (flag) {
                 return CommonResponse.success("操作成功");
-            }else {
+            } else {
                 return CommonResponse.fail("操作失败");
             }
-        }catch (Exception e){
+        } catch (Exception e) {
+            return CommonResponse.error("系统异常");
+        }
+
+    }
+
+    /**
+     * fetch 删除用户银行卡
+     *
+     * @return
+     * @author: tianliya
+     * @time: 2018/10/23
+     */
+    @PostMapping("/deleteUserBank")
+    public CommonResponse deleteUserBank(Long id) {
+        try {
+            boolean flag = this.userBankCardService.deleteUserBankCard(id);
+            if (flag) {
+                return CommonResponse.success("操作成功");
+            } else {
+                return CommonResponse.fail("操作失败");
+            }
+        } catch (Exception e) {
+            return CommonResponse.error("系统异常");
+        }
+    }
+
+
+    /**
+     * fetch 绑定用户支付宝
+     *
+     * @return
+     * @author: tianliya
+     * @time: 2018/10/23
+     */
+    @PostMapping("/bindAliPay")
+    public CommonResponse bindAliPay(UserAlipay userAlipay, Long userId) {
+        try {
+            boolean flag = this.userAlipayService.bindUserAlipay(userAlipay, userId);
+            if (flag) {
+                return CommonResponse.success("操作成功");
+            } else {
+                return CommonResponse.fail("操作失败");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
             return CommonResponse.error("系统异常");
         }
     }
 
     /**
-     * fetch 删除用户银行卡
+     * fetch 绑定用户支付宝
+     *
+     * @return
      * @author: tianliya
      * @time: 2018/10/23
-     * @return
      */
-    @PostMapping("/deleteUserBank")
-    public CommonResponse deleteUserBank(Long id){
-        try{
-            boolean flag  = this.userBankCardService.deleteUserBankCard(id);
-            if (flag){
-                return CommonResponse.success("操作成功");
-            }else {
-                return CommonResponse.fail("操作失败");
-            }
-        }catch (Exception e){
+
+    @GetMapping("/getUserAliPay")
+    public CommonResponse getUserAliPay(Long userId) {
+        try {
+            UserAlipayVO userAlipayVO = this.userAlipayService.getUserAlipay(userId);
+            return CommonResponse.success("操作成功", userAlipayVO);
+        } catch (Exception e) {
             return CommonResponse.error("系统异常");
         }
     }
+
+    /**
+     * fetch 修改支付宝信息
+     *
+     * @return
+     * @author: tianliya
+     * @time: 2018/10/23
+     */
+    @PostMapping("/modifyAliPay")
+    public CommonResponse modifyAliPay(UserAlipay userAlipay) {
+        try {
+            boolean flag = this.userAlipayService.modifyUserAlipay(userAlipay);
+            if (flag) {
+                return CommonResponse.success("操作成功");
+            } else {
+                return CommonResponse.fail("操作失败");
+            }
+        } catch (Exception e) {
+            return CommonResponse.error("系统异常");
+        }
+    }
+
 }
