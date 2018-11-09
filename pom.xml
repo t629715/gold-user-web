@@ -55,7 +55,11 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-
+		<dependency>
+			<groupId>com.goldeasy.common.web</groupId>
+			<artifactId>goldeasy-common-web</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
 		<dependency>
 			<groupId>com.goldeasy.user</groupId>
 			<artifactId>goldeasy-user-interface</artifactId>

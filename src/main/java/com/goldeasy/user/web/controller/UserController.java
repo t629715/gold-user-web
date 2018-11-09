@@ -4,7 +4,9 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import com.goldeasy.common.response.CommonResponse;
 import com.goldeasy.user.dto.UserBankCardDTO;
 import com.goldeasy.user.dto.UserRealNameDTO;
+import com.goldeasy.user.entity.UserAddress;
 import com.goldeasy.user.entity.UserAlipay;
+import com.goldeasy.user.service.UserAddressService;
 import com.goldeasy.user.service.UserAlipayService;
 import com.goldeasy.user.service.UserBankCardService;
 import com.goldeasy.user.service.UserService;
@@ -31,6 +33,9 @@ public class UserController {
 
     @Reference(timeout = 2000, version = "${dubbo.service.version}", loadbalance = "random")
     private UserAlipayService userAlipayService;
+
+    @Reference(timeout = 2000, version = "${dubbo.service.version}", loadbalance = "random")
+    private UserAddressService userAddressService;
 
 
     /**
@@ -350,6 +355,108 @@ public class UserController {
             } else {
                 return CommonResponse.fail("操作失败");
             }
+        } catch (Exception e) {
+            return CommonResponse.error("系统异常");
+        }
+    }
+
+    /**
+     * fetch 添加收货地址
+     *
+     * @return
+     * @author:
+     * @time: 2018/10/23
+     */
+    @PostMapping("/addUserAddress")
+    public CommonResponse addUserAddress(UserAddress userAddress, Long userId) {
+        try {
+            boolean flag = this.userAddressService.addUserAddress(userAddress, userId);
+            if (flag) {
+                return CommonResponse.success("操作成功");
+            } else {
+                return CommonResponse.fail("操作失败");
+            }
+        } catch (Exception e) {
+            return CommonResponse.error("系统异常");
+        }
+    }
+
+    /**
+     * fetch 添加收货地址
+     *
+     * @return
+     * @author:
+     * @time: 2018/10/23
+     */
+    @PostMapping("/deleteUserAddress")
+    public CommonResponse deleteUserAddress(Long id) {
+        try {
+            boolean flag = this.userAddressService.deleteUserAddressById(id);
+            if (flag) {
+                return CommonResponse.success("操作成功");
+            } else {
+                return CommonResponse.fail("操作失败");
+            }
+        } catch (Exception e) {
+            return CommonResponse.error("系统异常");
+        }
+    }
+
+    /**
+     * fetch 修改收货地址
+     *
+     * @return
+     * @author:
+     * @time: 2018/10/23
+     */
+    @PostMapping("/modifyUserAddress")
+    public CommonResponse modifyUserAddress(UserAddress userAddress) {
+        try {
+            boolean flag = this.userAddressService.modifyUserAddressById(userAddress);
+            if (flag) {
+                return CommonResponse.success("操作成功");
+            } else {
+                return CommonResponse.fail("操作失败");
+            }
+        } catch (Exception e) {
+            return CommonResponse.error("系统异常");
+        }
+    }
+
+    /**
+     * fetch 设置收货地址
+     *
+     * @return
+     * @author:
+     * @time: 2018/10/23
+     */
+    @PostMapping("/setDefaultAddress")
+    public CommonResponse setDefaultAddress(Long id, Long userId) {
+        try {
+            boolean flag = this.userAddressService.setDefaultAddress(id, userId);
+            if (flag) {
+                return CommonResponse.success("操作成功");
+            } else {
+                return CommonResponse.fail("操作失败");
+            }
+        } catch (Exception e) {
+            return CommonResponse.error("系统异常");
+        }
+    }
+
+
+    /**
+     * fetch 设置收货地址
+     *
+     * @return
+     * @author:
+     * @time: 2018/10/23
+     */
+    @PostMapping("/listUserAddress")
+    public CommonResponse listUserAddress(Long userId) {
+        try {
+            List<UserAddressVO> userAddressList = this.userAddressService.listUserAddress(userId);
+           return CommonResponse.success("成功",userAddressList);
         } catch (Exception e) {
             return CommonResponse.error("系统异常");
         }
